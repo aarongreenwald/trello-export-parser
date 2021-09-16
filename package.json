@@ -1,12 +1,12 @@
 {
   "name": "trello",
   "version": "1.0.0",
-  "description": "",
+  "description": "Processes Trello board JSON exports and converts to plain-text files (with some markdown)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "aaron@aarongreenwald.com",
+  "license": "MIT"
 }

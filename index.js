@@ -1,25 +1,28 @@
 const fs = require('fs').promises;
 
-const DIRECTORY =  `/home/aaron/Desktop/trello`;
-const OUTPUT = `/home/aaron/Desktop/trellout`;
+/**
+ * Directory should be organized as root/$org/$board.json, optionally with me.json in the root
+ */
+const INPUT_DIRECTORY =  `~/Desktop/trello`;
+const OUTPUT_DIRECTORY = `~/Desktop/trellout`;
 
 //TODO attachment downloads, checklists, labels, duedates, what else?
 
 (async function() {
     try {
 
-        await fs.rmdir(OUTPUT, {recursive: true})
-        await fs.mkdir(OUTPUT)
+        await fs.rmdir(OUTPUT_DIRECTORY, {recursive: true})
+        await fs.mkdir(OUTPUT_DIRECTORY)
 
-        const orgs = (await fs.readdir(DIRECTORY)).filter(x => x !== 'me.json')
+        const orgs = (await fs.readdir(INPUT_DIRECTORY)).filter(x => x !== 'me.json')
 
         const allBoards = await Promise.all(orgs.map(o => {
-            return fs.readdir(`${DIRECTORY}/${o}`).then(boards => boards.map(b => ({org: o, board: b})))
+            return fs.readdir(`${INPUT_DIRECTORY}/${o}`).then(boards => boards.map(b => ({org: o, board: b})))
         }))
 
         console.log(allBoards.flatMap(x => x))
         const boards = await Promise.all(allBoards.flatMap(x => x).map(b =>
-            fs.readFile(`${DIRECTORY}/${b.org}/${b.board}`)
+            fs.readFile(`${INPUT_DIRECTORY}/${b.org}/${b.board}`)
                 .then(f => f.toString())
                 .then(f => JSON.parse(f))
                 .then(f => ({board: b, content: getBoard(f) }))
@@ -38,7 +41,7 @@ const writeBoard = async ({board, content}) => {
 
 const writeList = async (board, list) => {
     //TODO consider including the list index for sort position. How often is it meaningful?
-    const listPath = `${OUTPUT}/${board.org}/${list.boardSlug}/${list.closed ? '.' : ''}${list.name}`;
+    const listPath = `${OUTPUT_DIRECTORY}/${board.org}/${list.boardSlug}/${list.closed ? '.' : ''}${list.name}`;
     console.log('Writing list', listPath)
     await fs.mkdir(listPath, { recursive: true });
     if (!list.cards.length) {
