@@ -4,9 +4,13 @@
   "description": "Processes Trello board JSON exports and converts to plain-text files (with some markdown)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "parse": "DOTENV=./.env node ./index.js"
   },
+  "private": true,
   "keywords": [],
   "author": "aaron@aarongreenwald.com",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "dotenv": "^10.0.0"
+  }
 }

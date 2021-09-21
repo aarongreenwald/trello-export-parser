@@ -1,12 +1,13 @@
 const fs = require('fs').promises;
-
+if (process.env.DOTENV) {
+    require('dotenv').config({path: process.env.DOTENV})
+}
+//TODO attachment downloads, checklists, labels, duedates, what else?
 /**
  * Directory should be organized as root/$org/$board.json, optionally with me.json in the root
  */
-const INPUT_DIRECTORY =  `~/Desktop/trello`;
-const OUTPUT_DIRECTORY = `~/Desktop/trellout`;
-
-//TODO attachment downloads, checklists, labels, duedates, what else?
+const INPUT_DIRECTORY =  process.env.INPUT_DIRECTORY;
+const OUTPUT_DIRECTORY = process.env.OUTPUT_DIRECTORY;
 
 (async function() {
     try {
