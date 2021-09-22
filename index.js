@@ -80,7 +80,7 @@ const writeList = async (board, list) => {
                     if (item.due) {
                         throw new Error('Unhandled due date')
                     }
-                    await fs.appendFile(cardPath, `[${item.state === 'complete' ? 'x' : ''}] ${item.name}\n`)
+                    await fs.appendFile(cardPath, `- [${item.state === 'complete' ? 'x' : ''}] ${item.name}  \n`)
                 }
             }
 
@@ -174,7 +174,9 @@ const getCards = (cards) => {
             name: c.name,
             nonUniqueSlug,
             closed: c.closed,
-            body: c.desc,
+            // Trello's partial markdown implementation puts line breaks for every \n, but proper markdown requires two spaces before
+            // the linebreak in order to render the linebreak
+            body: c.desc.replace(/\n/g, '  \n'),
             pos: c.pos,
             listId: c.idList,
             checklistIds: c.idChecklists,
